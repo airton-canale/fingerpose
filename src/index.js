@@ -19,6 +19,13 @@ const gestureStrings = {
   rock: "✊🏻",
   paper: "🖐🏻",
   scissors: "✌🏻",
+  dont: "🙅🏻‍♂️",
+};
+
+const base = ["Horizontal ", "Diagonal Up "];
+const dont = {
+  left: [...base].map((i) => i.concat(`Right`)),
+  right: [...base].map((i) => i.concat(`Left`)),
 };
 
 async function createDetector() {
@@ -47,12 +54,28 @@ async function main() {
   const knownGestures = [
     fp.Gestures.VictoryGesture,
     fp.Gestures.ThumbsUpGesture,
-    ...gestures
+    ...gestures,
   ];
   const GE = new fp.GestureEstimator(knownGestures);
   // load handpose model
   const detector = await createDetector();
   console.log("mediaPose model loaded");
+  const pair = new Set();
+
+  function checkGestureCombination(chosenHand, poseData) {
+    const addToPairIfCorrect = (chosenHand) => {
+      const containsHands = poseData.some((finger) =>
+        dont[chosenHand].includes(finger[2])
+      );
+      if (!containsHands) return;
+      pair.add(chosenHand)
+    };
+
+    addToPairIfCorrect(chosenHand)
+    if(pair.size !== 2) return;
+    resultLayer.left.innerText = resultLayer.right.innerText = gestureStrings.dont 
+    pair.clear()
+  }
 
   // main estimation loop
   const estimateHands = async () => {
@@ -79,19 +102,25 @@ async function main() {
         keypoint.z,
       ]);
 
-      const predictions = GE.estimate((keypoints3D), 9);
+      const predictions = GE.estimate(keypoints3D, 9);
       if (!predictions.gestures.length) {
-        updateDebugInfo(predictions.poseData, 'left')
+        updateDebugInfo(predictions.poseData, "left");
       }
 
       if (predictions.gestures.length > 0) {
+        const result = predictions.gestures.reduce((p, c) =>
+          p.score > c.score ? p : c
+        );
+        const found = gestureStrings[result.name];
         // find gesture with highest match score
-        let result = predictions.gestures.reduce((p, c) => {
-          return p.score > c.score ? p : c;
-        });
         const chosenHand = hand.handedness.toLowerCase();
-        resultLayer[chosenHand].innerText = gestureStrings[result.name];
         updateDebugInfo(predictions.poseData, chosenHand);
+
+        if (found !== gestureStrings.dont) {
+          resultLayer[chosenHand].innerText = found;
+          continue;
+        }
+        checkGestureCombination(chosenHand, predictions.poseData);
       }
     }
     // ...and so on
