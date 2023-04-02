@@ -20,6 +20,9 @@ const gestureStrings = {
   paper: "🖐🏻",
   scissors: "✌🏻",
   dont: "🙅🏻‍♂️",
+  rockandroll: "🤘🏻",
+  one: "☝🏻",
+  gun: "🔫"
 };
 
 const base = ["Horizontal ", "Diagonal Up "];

@@ -4,6 +4,12 @@ const rockGesture = new GestureDescription("rock"); // ✊🏻
 const paperGesture = new GestureDescription("paper"); // ✋🏻
 const scissorsGesture = new GestureDescription("scissors"); // ✌🏻
 const dontGesture = new GestureDescription("dont"); // 🙅🏻‍♂️
+const rockAndRollGesture = new GestureDescription("rockandroll"); // 🤘🏻
+const oneGesture = new GestureDescription("one"); // ☝🏻
+const gunGesture = new GestureDescription("gun"); // 🔫
+
+
+
 
 
 // Rock
@@ -60,8 +66,48 @@ for(const finger of Finger.all){
 
 }
 
+// Rock and Roll
+//------------------------------------------------------------------------------
+
+rockAndRollGesture.addCurl(Finger.Thumb, FingerCurl.HalfCurl, 1.0);
+rockAndRollGesture.addCurl(Finger.Thumb, FingerCurl.NoCurl, 1.0);
 
 
-const gestures = [rockGesture, paperGesture, scissorsGesture, dontGesture];
+rockAndRollGesture.addCurl(Finger.Index, FingerCurl.NoCurl, 1.0);
+
+rockAndRollGesture.addCurl(Finger.Middle, FingerCurl.FullCurl, 1.0);
+rockAndRollGesture.addCurl(Finger.Ring, FingerCurl.FullCurl, 1.0);
+rockAndRollGesture.addCurl(Finger.Ring, FingerCurl.HalfCurl, 0.9);
+
+rockAndRollGesture.addCurl(Finger.Pinky, FingerCurl.NoCurl, 1.0);
+
+// one
+//------------------------------------------------------------------------------
+
+oneGesture.addCurl(Finger.Thumb, FingerCurl.NoCurl, 1.0);
+oneGesture.addCurl(Finger.Thumb, FingerCurl.HalfCurl, 1.0);
+
+
+
+oneGesture.addCurl(Finger.Index, FingerCurl.NoCurl, 1.0);
+
+
+oneGesture.addCurl(Finger.Middle, FingerCurl.FullCurl, 1.0);
+oneGesture.addCurl(Finger.Ring, FingerCurl.FullCurl, 1.0);
+oneGesture.addCurl(Finger.Pinky, FingerCurl.FullCurl, 1.0);
+
+// gun
+//------------------------------------------------------------------------------
+
+gunGesture.addCurl(Finger.Thumb, FingerCurl.NoCurl, 1.0);
+gunGesture.addCurl(Finger.Index, FingerCurl.NoCurl, 1.0);
+
+gunGesture.addCurl(Finger.Middle, FingerCurl.FullCurl, 1.0);
+gunGesture.addCurl(Finger.Ring, FingerCurl.FullCurl, 1.0);
+gunGesture.addCurl(Finger.Pinky, FingerCurl.FullCurl, 1.0);
+
+
+
+const gestures = [rockGesture, paperGesture, scissorsGesture, dontGesture, rockAndRollGesture, oneGesture, gunGesture];
 
 export {gestures};
